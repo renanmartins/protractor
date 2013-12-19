@@ -3,8 +3,8 @@ Getting Started
 
 This guide describes how to get started writing Protractor tests.
 
-WebDriverJS
------------
+Understand that Protractor wraps WebDriverJS
+--------------------------------------------
 
 When writing tests, it's important to remember that Protractor is a wrapper
 around [WebDriverJS](https://code.google.com/p/selenium/wiki/WebDriverJs). It's
@@ -20,7 +20,7 @@ When writing tests, keep the following in mind:
 -  The test code and scripts running in the browser are separated, and only
    communicate through the [WebDriver wire protocol](https://code.google.com/p/selenium/wiki/JsonWireProtocol).
 -  WebDriver commands are scheduled on a control flow and return promises, not
-   primitive values. See the [control flow doc](/control-flow.md) for more
+   primitive values. See the [control flow doc](/docs/control-flow.md) for more
    info.
 -  To run tests, WebDriverJS needs to talk to a selenium standalone server
    running as a separate process.
@@ -32,21 +32,20 @@ Install Protractor with
 
     npm install -g protractor
 
-(or omit the -g if you'd prefer not to install globally). 
+(or omit the -g if you'd prefer not to install globally).
 
-The example test expects a selenium standalone server to be running at 
+The example test expects a selenium standalone server to be running at
 localhost:4444. Protractor comes with a script to help download and install
 the standalone server. Run
 
-    node_modules/protractor/bin/install_selenium_standalone
+    webdriver-manager update
 
-This installs selenium standalone server and chromedriver to `./selenium`. Start
-the server with
+This installs selenium standalone server and chromedriver to `protractor/selenium`. Start the server with
 
-    ./selenium/start
+    webdriver-manager start
 
 Protractor is now available as a command line program which takes one argument,
-a configuration file. 
+a configuration file.
 
     protractor node_modules/protractor/example/conf.js
 
@@ -105,7 +104,8 @@ describe('angularjs homepage', function() {
     // Load the AngularJS homepage.
     browser.get('http://www.angularjs.org');
 
-    // Find the element with ng-model matching 'yourName', and then
+    // Find the element with ng-model matching 'yourName' - this will
+    // find the <input type="text" ng-model="yourName"/> element - and then
     // type 'Julie' into it.
     element(by.model('yourName')).sendKeys('Julie');
 
@@ -133,19 +133,33 @@ parameter, a *locator* strategy for locating the element. Protractor offers Angu
    either from `ng-bind` or `{{}}` notation in the template.
 -  `by.model` searches for elements by input `ng-model`.
 -  `by.repeater` searches for `ng-repeat` elements. For example,
-   `by.repeater('phone in phones').row(12).column('price')` returns
-   the element in the 12th row of the `ng-repeat = "phone in phones"` repeater
+   `by.repeater('phone in phones').row(11).column('price')` returns
+   the element in the 12th row (0-based) of the `ng-repeat = "phone in phones"` repeater
    with the binding matching `{{phone.price}}`.
 
 You may also use plain old WebDriver strategies such as `by.id` and
 `by.css`. Since locating by CSS selector is so common, the global variable `$` is an alias for `element.by.css`.
 
 `element` returns an ElementFinder. This is an object which allows you to interact with the element on your page, but since all interaction with the browser must be done over webdriver, it is important to remember that this is *not* a DOM element. You can interact with it with methods such as
-`sendKeys`, `getText`, and `click`. Check out the [API](/api.md) for a list of
+`sendKeys`, `getText`, and `click`. Check out the [API](/docs/api.md) for a list of
 all available methods.
 
 See Protractor's [findelements test suite](https://github.com/angular/protractor/blob/master/spec/basic/findelements_spec.js)
 for more examples.
+
+
+Setting up the System Under Test
+--------------------------------
+
+Protractor uses real browsers to run its tests, so it can connect to anything that your browser can connect to. This means you have great flexibility in deciding _what_ you are actually testing. It could be a development server on localhost, a staging server up on your local network, or even production servers on the general internet. All Protractor needs is the URL.
+
+There are a couple of things to watch out for!
+
+**If your page does manual bootstrap** Protractor will not be able to load your page using `browser.get`. Instead, use the base webdriver instance - `browser.driver.get`. This means that Protractor does not know when your page is fully loaded, and you may need to add a wait statement to make sure your tests avoid race conditions.
+
+**If your page uses $timeout for polling** Protractor will not be able to tell when your page is ready. Consider using $interval instead of $timeout and see [this issue](https://github.com/angular/protractor/issues/49) for further discussion.
+
+If you need to do global preparation for your tests (for example, logging in), you can put this into the config in the `onPrepare` property. This property can be either a function or a filename. If a filename, Protractor will load that file with node.js and run its contents. See the [login tests](https://github.com/angular/protractor/blob/master/spec/login) for an example.
 
 
 Organizing Real Tests: Page Objects

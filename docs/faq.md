@@ -9,7 +9,7 @@ performing any action (such as finding an element or sending a command to
 an element). If your application continuously polls $timeout or $http, it will
 never be registered as completely loaded. You should use the
 [$interval service](https://github.com/angular/angular.js/blob/master/src/ng/interval.js) for anything that polls continuously (introduced in Angular 1.2rc3). Further
-discussion is in [issue 59](https://github.com/angular/protractor/issues/49).
+discussion is in [issue 49](https://github.com/angular/protractor/issues/49).
 
 You may also be running into a timeout because your page is slow to load
 or perform actions. By default, Protractor sets the timeout for actions to
@@ -40,6 +40,13 @@ written with Protractor.
 Here's a [great blog post](http://www.yearofmoo.com/2013/09/advanced-testing-and-debugging-in-angularjs.html)
 with more info.
 
+Angular can't be found on my page
+---------------------------------
+
+Protractor supports angular 1.0.6/1.1.4 and higher - check that your version of Angular is upgraded.
+
+The `angular` variable is expected to be available in the global context. Try opening chrome devtools or firefox and see if `angular` is defined.
+
 How do I deal with my log-in page?
 ----------------------------------
 
@@ -59,3 +66,19 @@ The result of `getText` from an input element is always empty
 This is a [webdriver quirk](http://grokbase.com/t/gg/webdriver/12bcmvwhcm/extarcting-text-from-the-input-field).
 `<input>` and `<textarea>` elements always have
 empty `getText` values. Instead, try `element.getAttribute('value')`.
+
+How can I interact directly with the JavaScript running in my app?
+------------------------------------------------------------------
+
+In general, the design of WebDriver tests is to interact with the page as a user would, so it gets a little tricky if you want to interact with the JavaScript directly. You should avoid it unless you have a good reason. However, there are ways of doing it.
+
+You can use the evaluate function on a WebElement to get the value of an Angular expression in the scope of that element. e.g.
+```javascript
+by.css('.foo').evaluate('bar')
+```
+would return whatever `{{bar}}` is in the scope of the element with class 'foo'.
+
+You can also execute arbitrary JavaScript in the browser with
+```javascript
+browser.executeScript('your script as a string')
+```

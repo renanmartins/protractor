@@ -1,11 +1,11 @@
 Protractor
 ==========
 
-Protractor is an end to end test framework for [AngularJS](http://angularjs.org/) applications built on top of [WebDriverJS](https://code.google.com/p/selenium/wiki/WebDriverJs).
+Protractor is an end to end test framework for [AngularJS](http://angularjs.org/) applications built on top of [WebDriverJS](https://code.google.com/p/selenium/wiki/WebDriverJs). Protractor runs tests against your application running in a real browser, interacting with it as a user would.
 
-Protractor can be run as a standalone binary runner, or included into your tests as a library. Use [Protractor as a library](https://github.com/angular/protractor/blob/master/docs/library-only.md) if you would like to manage WebDriver and your test setup yourself.
+Protractor can be run as a standalone binary, or included into your tests as a library. Use [Protractor as a library](https://github.com/angular/protractor/blob/master/docs/library-only.md) if you would like to manage WebDriver and your test setup yourself.
 
-For more information, [read the docs](https://github.com/angular/protractor/tree/master/docs), or head over to the [FAQ](https://github.com/angular/protractor/blob/master/docs/faq.md).
+For more information, [read the docs](https://github.com/angular/protractor/tree/master/docs/getting-started.md), or head over to the [FAQ](https://github.com/angular/protractor/blob/master/docs/faq.md).
 
 
 To run the sample tests
@@ -17,7 +17,7 @@ Install protractor with.
 
 Start up a selenium server (See the appendix below for help with this). By default, the tests expect the selenium server to be running at `http://localhost:4444/wd/hub`.
 
-The example folder contains a simple test suite which runs against angularjs.org. Run with: 
+The node module's example folder contains a simple test suite which runs against angularjs.org. Run with: 
 
     protractor example/conf.js
 
@@ -39,9 +39,7 @@ Create a configuration file - an example with detailed comments is shown in `nod
 // myConf.js
 exports.config = {
   seleniumAddress: 'http://localhost:4444/wd/hub',
-  jasmineNodeOpts: {
-    specs: ['myTest.js', 'myTestFolder/*Test.js']
-  }
+  specs: ['myTest.js', 'myTestFolder/*Test.js']
 }
 ```
 
@@ -95,18 +93,20 @@ Then run the tests with
 Appendix A: Setting up a standalone selenium server
 ---------------------------------------------------
 
-WebdriverJS does not natively include the selenium server - you must start a standalone selenium server. All you need is the latest [selenium-server-standalone.](https://code.google.com/p/selenium/downloads/list)
+WebdriverJS does not natively include the selenium server - you must start a standalone selenium server. All you need is the latest [selenium-server-standalone.](https://code.google.com/p/selenium/downloads/list). To drive individual browsers, you may need to install separate driver binaries.
 
-To use with chrome browsers, [download chromedriver](https://code.google.com/p/chromedriver/downloads/list).
-[More information about chromedriver](https://code.google.com/p/selenium/wiki/ChromeDriver)
+To use with chrome browsers, [download chromedriver](http://chromedriver.storage.googleapis.com/index.html).
+[More information about chromedriver](https://sites.google.com/a/chromium.org/chromedriver/)
 
-A script is included to do the download for you - run (add the --nocd option if you do not want to install ChromeDriver)
+The `webdriver-manager` script is included in the npm package to manage downloads for you. To see the options, run
 
-    ./node_modules/protractor/bin/install_selenium_standalone
+    npm install -g protractor
+    webdriver-manager
 
-Start the selenium standalone with
+Download and start the selenium server with
 
-    ./selenium/start
+    webdriver-manager update
+    webdriver-manager start
 
 For alternate ways to download and start the selenium standalone, see
 [the webdriver docs](http://docs.seleniumhq.org/docs/03_webdriver.jsp#running-standalone-selenium-server-for-use-with-remotedrivers).

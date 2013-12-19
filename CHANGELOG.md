@@ -1,6 +1,159 @@
+# 0.14.0
+
+_Note: Major version 0 releases are for initial development, and backwards incompatible changes may be introduced at any time._
+
+## Features
+
+- ([c579a1a](https://github.com/angular/protractor/commit/c579a1a01bae6798a87a5ca8915417775e1b6fb2)), ([f54fd5d](https://github.com/angular/protractor/commit/f54fd5d7c3caa8df319a0115086bb4db8443d856)) feat(webdriver-manager): redo the script to run and install selenium/webdriver
+
+  Breaking Change.
+  As outlined in Issue #296, redoing the way the selenium/webdriver
+  install and run helper scripts work. Now, the 'webdriver-manager' script
+  will be available either locally or globally (depending on how protractor
+  was installed). It replaced install_selenium_standalone and the 'start' script
+  that was provided after install. Run `webdriver-manager update` to download
+  new versions of selected webdriver binaries. Run `webdriver-manager start`
+  to start the standalone server. In addition, this fixes issues with running
+  the server starter in Windows, and allows automated downloading of the IEDriver.
+
+  Thanks to kurthong and vipper for their PRs with windows fixes, which were
+  very useful in preparing this.
+
+- ([a69ebc3](https://github.com/angular/protractor/commit/a69ebc3b783fb7bf42877a658498de90d3d196c3)) feat(runner): use selenium and chromedriver from the default location if nothing else is specified
+
+## Bug Fixes
+
+- ([1fa090c](https://github.com/angular/protractor/commit/1fa090c656cbab55bdbfb101b503b53811b50dff)) fix(runner): merge should override entire arrays, not just parts of them
+
+  Closes #304
+
+- ([a2afb4d](https://github.com/angular/protractor/commit/a2afb4d8399ba980674c79138dd98efb683e9ab9)) fix(element): element.all.get and element.all.first/last should wrap web elements
+
+  Closes #307
+
+- ([f3be172](https://github.com/angular/protractor/commit/f3be1727cf95dea50b597d20c6510e62a605dee2)) fix(runner): running with chromeOnly should try to find chromedriver with .exe extension
+
+  Closes #283
+
+## Breaking Changes
+
+- ([c579a1a](https://github.com/angular/protractor/commit/c579a1a01bae6798a87a5ca8915417775e1b6fb2)) feat(webdriver-manager): redo the script to run and install selenium/webdriver
+
+  Breaking Change.
+  Your old selenium/start script will continue to work, but install_selenium_standalone no longer exists.
+  To do a clean update, remove the selenium folder. Then run
+  `webdriver-manager update`
+
+- ([a1c91a2](https://github.com/angular/protractor/commit/a1c91a29af5c1e1f35744462ca16ef4b33ad6c48)) fix(config): Make all file paths in config files relative to the config file itself
+
+  Breaking Change
+  Previously, onPrepare and specs were relative to the location of the config,
+  but seleniumServerJar and chromeDriver were relative to the cwd when the
+  test was called. If you were calling the tests from somewhere other than
+  the same directory as the config location, you will need to change the paths of
+  seleniumServerJar and/or chromeDriver.  Closes #222.
+
+
+# 0.13.0
+
+_Note: Major version 0 releases are for initial development, and backwards incompatible changes may be introduced at any time._
+
+## Features
+
+- ([ce5f494](https://github.com/angular/protractor/commit/ce5f494289c3750b84c6783339a14342a1b74f3d)) feat(element): element.all now has 'first' and 'last' methods
+
+- ([ef61662](https://github.com/angular/protractor/commit/ef6166232186b3385769f63430819a722052cc44)) feat(runner): allow bypassing the selenium standalone server if running only chrome
+
+  Using the config option `chromeOnly` now enables running ChromeDriver directly,
+  without going through the Selenium Standalone. The chromedriver binary should be
+  available in your PATH, or should be specified with the config option
+  `chromeDriver`.
+
+- ([76c094a](https://github.com/angular/protractor/commit/76c094a3fa69511b0311011b0ef2c7343b8e655b)) feat(getLocationAbsUrl) - allows current url to be obtained on IE (and Chrome/Firefox)
+
+- ([6a1c918](https://github.com/angular/protractor/commit/6a1c91848858453d0af712588b51c0bdaa0c9445)) feat(runner): add error message for bad jar path
+
+- ([98bce7e](https://github.com/angular/protractor/commit/98bce7e2ac1e659faf2d8727e1fda210b796525e)) feat(locators): add the ability to add custom element locators with by.addLocator
+
+  Custom locators can now be added using by.addLocator(name, script), where
+  script is a self-contained snippet to be executed on the browser which returns
+  an array of elements. Closes #236.
+
+- ([c7bcc20](https://github.com/angular/protractor/commit/c7bcc20c07416237f69f7934d257b5ba5bfe8c1f)) chore(angular): update to angular 1.2
+
+
+## Bug Fixes
+
+- ([a24eeee](https://github.com/angular/protractor/commit/a24eeee4f08e973ffcecd107b6610ce1c2c5e3f6)) fix(runner): do not error out if only one spec pattern does not match any files
+
+  Previously, the runner would throw an error if any one of the spec patterns did not
+  match any files. Now it logs a warning in that case, and errors out only if there
+  are no found files in any spec patterns. Closes #260
+
+- ([f3b3fdb](https://github.com/angular/protractor/commit/f3b3fdbcbc8fe4f3c5915ef0f6eb7c89e339a62e)) fix(element): fix an error where all.then() wasn't calling callbacks.
+
+  Closes #267
+
+- ([137d804](https://github.com/angular/protractor/commit/137d8040778215fd841654d3ca465b71f8719ea5)) fix(jasminewd): patched matcher should understand 'not'
+
+  Closes #139.
+
+
+# 0.12.1
+
+_Note: Major version 0 releases are for initial development, and backwards incompatible changes may be introduced at any time._
+
+## Minor features
+
+- ([201b59c](https://github.com/angular/protractor/commit/201b59c2e728c56d2a88a1167ed3007b22ab9034)) feat(jasminewd): better error messaging when expect is called with a WebElement
+
+- ([d383770](https://github.com/angular/protractor/commit/d383770499da4b08b74ad53c20ffa288147f94e9)) feat(clientsidescripts): better error reporting from testForAngular and waitForAngular
+
+## Bug fixes
+
+- ([8580c0c](https://github.com/angular/protractor/commit/8580c0c76c5ccd3c55d053e59d8df37b3c4cf35a)) fix(install-selenium): update to chromedriver 2.6
+
+  Update to the latest version of Chromedriver. This fixes the issue with
+  OS X 10.9. Closes #181.
+
+- ([ebc528f](https://github.com/angular/protractor/commit/ebc528fec2c2e88b0f9e32cee0661ecd79da2252)) fix(debugging): switch debugging tests to the new test app urls.
+
+- ([8ff4787](https://github.com/angular/protractor/commit/8ff47875488647513f4199bab36e3b0023dd305d)) fix(runner): exit with proper code when tests fail
+
+  When errors with messages matching /timeout/ were created, Protractor
+  clears the control flow so that the remainder of the tasks scheduled
+  for that spec don't bleed over into the next spec. This was messing up
+  the promises used in the runner, since they are also webdriver promises.
+  Long term, the runner should _not_ use webdriver promises. For now, fix by
+  having the runner resolve promises directly rather than through chaining,
+  and add a TODO to use promises which aren't connected to WebDriver's
+  control flow in the runner.
+
+  Closes #214.
+
+- ([81501c5](https://github.com/angular/protractor/commit/81501c5d941cd7edb15439cef7c7a64c0e773e27)) fix(clientsidescripts): workaround for IE 8 "async page reload" init problem
+
+- ([21264fd](https://github.com/angular/protractor/commit/21264fdc2f6cb3345c8f005936c74985ecd811dc)) fix(find): fix error when exposed to ng-options element with a default option
+
+  Protractor will now ignore elements with the ng-bind class that don't have
+  a proper binding on their data, instead of blowing up when encoutering them.
+
+  Closes #165, may fix #170
+
+  - ([f672648](https://github.com/angular/protractor/commit/f6726482cd2ce9a7dda9ccdeeb93574d3b9293e3)) fix(findelements): fix isPresent for repeaters by row for real
+
+## Breaking Changes
+
+- ([bf5b076](https://github.com/angular/protractor/commit/bf5b076cb8897d844c25baa91c263a12c61e3ab3)) fix(cli): remove boolean verbose and stack trace options
+
+  Also add better description for what the command line options are.
+
+  Tiny breaking change:
+    Rename the 'includeStackTrace' command line option to 'stackTrace' for brevity.
+
 # 0.12.0
 
-_Note: Major version 0 releases are for initial development, and backwards compatible changes may be introduced at any time._
+_Note: Major version 0 releases are for initial development, and backwards incompatible changes may be introduced at any time._
 
 This change introduces major syntax updates. Using the new syntax is recommeded, but the old version is still supported for now. Note also that the test application, docs, and example tests have been updated.
 
@@ -18,7 +171,7 @@ will now be exported.
 
 `$` is a shortcut for getting elements by css. `$('.foo')` === `element(by.css('.foo'))`
 
-All changes should be backwards compatible, as tested with the new 'backwardscompat'
+All changes should be backwards incompatible, as tested with the new 'backwardscompat'
 tests.
 
 ## Bug fixes
@@ -34,7 +187,7 @@ is called.
 
 # 0.11.0
 
-_Note: Major version 0 releases are for initial development, and backwards compatible changes may be introduced at any time._
+_Note: Major version 0 releases are for initial development, and backwards incompatible changes may be introduced at any time._
 
 ## Features
 
@@ -106,7 +259,7 @@ ptor.findElement(protractor.By.repeater('foo in foos').row(3));
 
 # 0.10.0
 
-_Note: Major version 0 releases are for initial development, and backwards compatible changes may be introduced at any time._
+_Note: Major version 0 releases are for initial development, and backwards incompatible changes may be introduced at any time._
 
 ## Features
 
@@ -180,7 +333,7 @@ timeout with `driver.manage().timeouts().setScriptTimeout(<bigNumber>)`.
 
 # 0.9.0
 
-_Note: Major version 0 releases are for initial development, and backwards compatible changes may be introduced at any time._
+_Note: Major version 0 releases are for initial development, and backwards incompatible changes may be introduced at any time._
 
 ## Features
 
@@ -207,7 +360,7 @@ Closes #11.
 
 # 0.8.0
 
-_Note: Major version 0 releases are for initial development, and backwards compatible changes may be introduced at any time._
+_Note: Major version 0 releases are for initial development, and backwards incompatible changes may be introduced at any time._
 
 ## Docs
 - Added documentation to the [docs folder](https://github.com/angular/protractor/tree/master/docs).
@@ -244,7 +397,7 @@ protractor.
 
 # 0.7.0
 
-_Note: Major version 0 releases are for initial development, and backwards compatible changes may be introduced at any time._
+_Note: Major version 0 releases are for initial development, and backwards incompatible changes may be introduced at any time._
 
 ## Features
 
